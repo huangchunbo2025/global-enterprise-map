@@ -4,7 +4,7 @@ Global Enterprise Distribution Map - 交互式可视化展示17个主要城市�
 
 ## 预览
 
-在线访问: [GitHub Pages](https://socialhub-ai.github.io/global-enterprise-map/)
+在线访问: [GitHub Pages](https://huangchunbo2025.github.io/global-enterprise-map/)
 
 ## 功能特性
 
