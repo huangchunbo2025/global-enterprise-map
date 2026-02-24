@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球企业分布地图</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+        .header {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            padding: 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #e94560;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        .container {
+            display: flex;
+            height: calc(100vh - 100px);
+        }
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+        .sidebar {
+            width: 320px;
+            background: #ffffff;
+            padding: 20px;
+            overflow-y: auto;
+            border-left: 1px solid #e2e8f0;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+        }
+        .legend {
+            margin-bottom: 24px;
+        }
+        .legend h3 {
+            font-size: 14px;
+            color: #e94560;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid rgba(0,0,0,0.1);
+        }
+        .stats-section {
+            margin-bottom: 24px;
+        }
+        .stats-section h3 {
+            font-size: 14px;
+            color: #e94560;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-card .region {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        .stat-card .value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .stat-card .label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .city-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .city-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .city-item:hover {
+            background: #e2e8f0;
+            transform: translateX(4px);
+        }
+        .city-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+        }
+        .city-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e94560;
+        }
+        .leaflet-popup-content-wrapper {
+            background: #ffffff;
+            color: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        .leaflet-popup-tip {
+            background: #ffffff;
+        }
+        .leaflet-popup-content {
+            margin: 16px 20px;
+        }
+        .popup-city {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        .popup-region {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .popup-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .popup-stat-label {
+            color: #64748b;
+            font-size: 12px;
+        }
+        .popup-stat-value {
+            font-weight: 600;
+            font-size: 14px;
+            color: #334155;
+        }
+        .popup-stat-value.highlight {
+            color: #e94560;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: 300px;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>全球企业分布地图</h1>
+        <p>Global Enterprise Distribution Map - 17个主要城市数据概览</p>
+    </div>
+    <div class="container">
+        <div id="map"></div>
+        <div class="sidebar">
+            <div class="legend">
+                <h3>区域图例</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e94560;"></div>
+                    <span>中东 (Middle East)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #0ea5e9;"></div>
+                    <span>亚太 (Asia Pacific)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #22c55e;"></div>
+                    <span>北美 (North America)</span>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h3>区域统计</h3>
+                <div class="stat-card">
+                    <div class="region">北美 North America</div>
+                    <div class="value">1,596</div>
+                    <div class="label">企业总数 (8城市)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">中东 Middle East</div>
+                    <div class="value">841</div>
+                    <div class="label">企业总数 (4城市)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">亚太 Asia Pacific</div>
+                    <div class="value">651</div>
+                    <div class="label">企业总数 (5城市)</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h3>城市排名 (按企业数)</h3>
+                <div class="city-list" id="cityList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const cities = [
+            { name: "利雅得", nameEn: "Riyadh", region: "中东", lat: 24.7136, lng: 46.6753, enterprises: 129, gdp: 230, population: 7.5 },
+            { name: "伊斯坦布尔", nameEn: "Istanbul", region: "中东", lat: 41.0082, lng: 28.9784, enterprises: 262, gdp: 450, population: 16 },
+            { name: "迪拜", nameEn: "Dubai", region: "中东", lat: 25.2048, lng: 55.2708, enterprises: 304, gdp: 180, population: 3.6 },
+            { name: "开罗", nameEn: "Cairo", region: "中东", lat: 30.0444, lng: 31.2357, enterprises: 146, gdp: 200, population: 22 },
+            { name: "悉尼", nameEn: "Sydney", region: "亚太", lat: -33.8688, lng: 151.2093, enterprises: 256, gdp: 500, population: 5.3 },
+            { name: "香港", nameEn: "Hong Kong", region: "亚太", lat: 22.3193, lng: 114.1694, enterprises: 147, gdp: 370, population: 7.5 },
+            { name: "新加坡", nameEn: "Singapore", region: "亚太", lat: 1.3521, lng: 103.8198, enterprises: 133, gdp: 400, population: 5.9 },
+            { name: "首尔", nameEn: "Seoul", region: "亚太", lat: 37.5665, lng: 126.9780, enterprises: 54, gdp: 780, population: 25 },
+            { name: "东京", nameEn: "Tokyo", region: "亚太", lat: 35.6762, lng: 139.6503, enterprises: 61, gdp: 2000, population: 37 },
+            { name: "华盛顿 DC", nameEn: "Washington DC", region: "北美", lat: 38.9072, lng: -77.0369, enterprises: 134, gdp: 600, population: 6.4 },
+            { name: "波特兰", nameEn: "Portland", region: "北美", lat: 45.5152, lng: -122.6784, enterprises: 37, gdp: 200, population: 2.5 },
+            { name: "温哥华", nameEn: "Vancouver", region: "北美", lat: 49.2827, lng: -123.1207, enterprises: 51, gdp: 150, population: 2.7 },
+            { name: "多伦多", nameEn: "Toronto", region: "北美", lat: 43.6532, lng: -79.3832, enterprises: 121, gdp: 450, population: 6.7 },
+            { name: "西雅图", nameEn: "Seattle", region: "北美", lat: 47.6062, lng: -122.3321, enterprises: 119, gdp: 500, population: 4.1 },
+            { name: "纽约", nameEn: "New York", region: "北美", lat: 40.7128, lng: -74.0060, enterprises: 676, gdp: 2100, population: 20 },
+            { name: "洛杉矶", nameEn: "Los Angeles", region: "北美", lat: 34.0522, lng: -118.2437, enterprises: 209, gdp: 1100, population: 13 },
+            { name: "旧金山", nameEn: "San Francisco", region: "北美", lat: 37.7749, lng: -122.4194, enterprises: 249, gdp: 900, population: 4.6 }
+        ];
+
+        const regionColors = {
+            "中东": "#e94560",
+            "亚太": "#0ea5e9",
+            "北美": "#22c55e"
+        };
+
+        // Initialize map with light theme
+        const map = L.map('map', {
+            center: [30, 20],
+            zoom: 2,
+            minZoom: 2,
+            maxZoom: 10
+        });
+
+        // Add light tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Calculate marker size based on enterprise count
+        function getMarkerSize(enterprises) {
+            const minSize = 14;
+            const maxSize = 45;
+            const maxEnterprises = 676;
+            return minSize + (enterprises / maxEnterprises) * (maxSize - minSize);
+        }
+
+        // Create markers
+        const markers = [];
+        cities.forEach(city => {
+            const size = getMarkerSize(city.enterprises);
+            const color = regionColors[city.region];
+
+            const icon = L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    border: 3px solid rgba(255,255,255,0.9);
+                    box-shadow: 0 4px 12px ${color}80, 0 2px 6px rgba(0,0,0,0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: ${Math.max(10, size/3)}px;
+                    font-weight: bold;
+                "></div>`,
+                iconSize: [size, size],
+                iconAnchor: [size/2, size/2]
+            });
+
+            const marker = L.marker([city.lat, city.lng], { icon })
+                .addTo(map)
+                .bindPopup(`
+                    <div class="popup-city">${city.name}</div>
+                    <div class="popup-region">${city.nameEn} · ${city.region}</div>
+                    <div class="popup-stat">
+                        <span class="popup-stat-label">企业数量</span>
+                        <span class="popup-stat-value highlight">${city.enterprises}</span>
+                    </div>
+                    <div class="popup-stat">
+                        <span class="popup-stat-label">GDP</span>
+                        <span class="popup-stat-value">~$${city.gdp}B</span>
+                    </div>
+                    <div class="popup-stat">
+                        <span class="popup-stat-label">人口</span>
+                        <span class="popup-stat-value">~${city.population}M</span>
+                    </div>
+                `, {
+                    closeButton: false
+                });
+
+            markers.push({ marker, city });
+        });
+
+        // Populate city list
+        const sortedCities = [...cities].sort((a, b) => b.enterprises - a.enterprises);
+        const cityList = document.getElementById('cityList');
+
+        sortedCities.forEach((city, index) => {
+            const item = document.createElement('div');
+            item.className = 'city-item';
+            item.innerHTML = `
+                <span class="city-name">${index + 1}. ${city.name}</span>
+                <span class="city-count">${city.enterprises}</span>
+            `;
+            item.style.borderLeft = `3px solid ${regionColors[city.region]}`;
+
+            item.addEventListener('click', () => {
+                map.setView([city.lat, city.lng], 6);
+                const markerData = markers.find(m => m.city.name === city.name);
+                if (markerData) {
+                    markerData.marker.openPopup();
+                }
+            });
+
+            cityList.appendChild(item);
+        });
+    </script>
+</body>
+</html>
