@@ -1,6 +1,6 @@
-# 全球企业分布地图
+# 全球零售企业分布地图
 
-Global Enterprise Distribution Map - 交互式可视化展示17个主要城市的企业数据
+Global Retail Enterprise Distribution - 交互式可视化展示17个主要城市的零售行业数据
 
 ## 预览
 

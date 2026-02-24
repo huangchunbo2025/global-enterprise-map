@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全球企业分布地图</title>
+    <title>全球零售企业分布地图</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * {
@@ -191,8 +191,8 @@
 </head>
 <body>
     <div class="header">
-        <h1>全球企业分布地图</h1>
-        <p>Global Enterprise Distribution Map - 17个主要城市数据概览</p>
+        <h1>全球零售企业分布地图</h1>
+        <p>Global Retail Enterprise Distribution - 17个主要城市零售行业数据概览</p>
     </div>
     <div class="container">
         <div id="map"></div>
@@ -217,17 +217,17 @@
                 <div class="stat-card">
                     <div class="region">北美 North America</div>
                     <div class="value">1,596</div>
-                    <div class="label">企业总数 (8城市)</div>
+                    <div class="label">零售企业总数 (8城市)</div>
                 </div>
                 <div class="stat-card">
                     <div class="region">中东 Middle East</div>
                     <div class="value">841</div>
-                    <div class="label">企业总数 (4城市)</div>
+                    <div class="label">零售企业总数 (4城市)</div>
                 </div>
                 <div class="stat-card">
                     <div class="region">亚太 Asia Pacific</div>
                     <div class="value">651</div>
-                    <div class="label">企业总数 (5城市)</div>
+                    <div class="label">零售企业总数 (5城市)</div>
                 </div>
             </div>
             <div class="stats-section">
@@ -320,7 +320,7 @@
                     <div class="popup-city">${city.name}</div>
                     <div class="popup-region">${city.nameEn} · ${city.region}</div>
                     <div class="popup-stat">
-                        <span class="popup-stat-label">企业数量</span>
+                        <span class="popup-stat-label">零售企业数量</span>
                         <span class="popup-stat-value highlight">${city.enterprises}</span>
                     </div>
                     <div class="popup-stat">
