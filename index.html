@@ -192,7 +192,7 @@
 <body>
     <div class="header">
         <h1>全球零售企业分布地图</h1>
-        <p>Global Retail Enterprise Distribution - 17个主要城市零售行业数据概览</p>
+        <p>Global Retail Enterprise Distribution - 20个主要城市零售行业数据概览</p>
     </div>
     <div class="container">
         <div id="map"></div>
@@ -211,6 +211,10 @@
                     <div class="legend-color" style="background: #22c55e;"></div>
                     <span>北美 (North America)</span>
                 </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f59e0b;"></div>
+                    <span>南美 (Latin America)</span>
+                </div>
             </div>
             <div class="stats-section">
                 <h3>区域统计</h3>
@@ -228,6 +232,11 @@
                     <div class="region">亚太 Asia Pacific</div>
                     <div class="value">651</div>
                     <div class="label">零售企业总数 (5城市)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">南美 Latin America</div>
+                    <div class="value">2,699</div>
+                    <div class="label">零售企业总数 (3城市)</div>
                 </div>
             </div>
             <div class="stats-section">
@@ -256,13 +265,17 @@
             { name: "西雅图", nameEn: "Seattle", region: "北美", lat: 47.6062, lng: -122.3321, enterprises: 119, gdp: 500, population: 4.1 },
             { name: "纽约", nameEn: "New York", region: "北美", lat: 40.7128, lng: -74.0060, enterprises: 676, gdp: 2100, population: 20 },
             { name: "洛杉矶", nameEn: "Los Angeles", region: "北美", lat: 34.0522, lng: -118.2437, enterprises: 209, gdp: 1100, population: 13 },
-            { name: "旧金山", nameEn: "San Francisco", region: "北美", lat: 37.7749, lng: -122.4194, enterprises: 249, gdp: 900, population: 4.6 }
+            { name: "旧金山", nameEn: "San Francisco", region: "北美", lat: 37.7749, lng: -122.4194, enterprises: 249, gdp: 900, population: 4.6 },
+            { name: "圣保罗", nameEn: "São Paulo", region: "南美", lat: -23.5505, lng: -46.6333, enterprises: 2500, gdp: 430, population: 22 },
+            { name: "圣地亚哥", nameEn: "Santiago", region: "南美", lat: -33.4489, lng: -70.6693, enterprises: 143, gdp: 160, population: 7 },
+            { name: "墨西哥城", nameEn: "Mexico City", region: "南美", lat: 19.4326, lng: -99.1332, enterprises: 56, gdp: 410, population: 22 }
         ];
 
         const regionColors = {
             "中东": "#e94560",
             "亚太": "#0ea5e9",
-            "北美": "#22c55e"
+            "北美": "#22c55e",
+            "南美": "#f59e0b"
         };
 
         // Initialize map with light theme
@@ -283,8 +296,8 @@
         // Calculate marker size based on enterprise count
         function getMarkerSize(enterprises) {
             const minSize = 14;
-            const maxSize = 45;
-            const maxEnterprises = 676;
+            const maxSize = 50;
+            const maxEnterprises = 2500;
             return minSize + (enterprises / maxEnterprises) * (maxSize - minSize);
         }
 
