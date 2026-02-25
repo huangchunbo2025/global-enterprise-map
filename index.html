@@ -192,7 +192,7 @@
 <body>
     <div class="header">
         <h1>全球零售企业分布地图</h1>
-        <p>Global Retail Enterprise Distribution - 20个主要城市零售行业数据概览</p>
+        <p>Global Retail Enterprise Distribution - 27个主要城市零售行业数据概览</p>
     </div>
     <div class="container">
         <div id="map"></div>
@@ -214,6 +214,10 @@
                 <div class="legend-item">
                     <div class="legend-color" style="background: #f59e0b;"></div>
                     <span>南美 (Latin America)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #8b5cf6;"></div>
+                    <span>欧洲 (Europe)</span>
                 </div>
             </div>
             <div class="stats-section">
@@ -237,6 +241,11 @@
                     <div class="region">南美 Latin America</div>
                     <div class="value">2,699</div>
                     <div class="label">零售企业总数 (3城市)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">欧洲 Europe</div>
+                    <div class="value">1,567</div>
+                    <div class="label">零售企业总数 (7城市)</div>
                 </div>
             </div>
             <div class="stats-section">
@@ -268,14 +277,22 @@
             { name: "旧金山", nameEn: "San Francisco", region: "北美", lat: 37.7749, lng: -122.4194, enterprises: 249, gdp: 900, population: 4.6 },
             { name: "圣保罗", nameEn: "São Paulo", region: "南美", lat: -23.5505, lng: -46.6333, enterprises: 2500, gdp: 430, population: 22 },
             { name: "圣地亚哥", nameEn: "Santiago", region: "南美", lat: -33.4489, lng: -70.6693, enterprises: 143, gdp: 160, population: 7 },
-            { name: "墨西哥城", nameEn: "Mexico City", region: "南美", lat: 19.4326, lng: -99.1332, enterprises: 56, gdp: 410, population: 22 }
+            { name: "墨西哥城", nameEn: "Mexico City", region: "南美", lat: 19.4326, lng: -99.1332, enterprises: 56, gdp: 410, population: 22 },
+            { name: "伦敦", nameEn: "London", region: "欧洲", lat: 51.5074, lng: -0.1278, enterprises: 652, gdp: 850, population: 9.5 },
+            { name: "巴黎", nameEn: "Paris", region: "欧洲", lat: 48.8566, lng: 2.3522, enterprises: 388, gdp: 760, population: 11 },
+            { name: "柏林", nameEn: "Berlin", region: "欧洲", lat: 52.5200, lng: 13.4050, enterprises: 49, gdp: 180, population: 3.6 },
+            { name: "罗马", nameEn: "Rome", region: "欧洲", lat: 41.9028, lng: 12.4964, enterprises: 69, gdp: 170, population: 4.3 },
+            { name: "马德里", nameEn: "Madrid", region: "欧洲", lat: 40.4168, lng: -3.7038, enterprises: 172, gdp: 280, population: 6.7 },
+            { name: "巴塞罗那", nameEn: "Barcelona", region: "欧洲", lat: 41.3851, lng: 2.1734, enterprises: 157, gdp: 200, population: 5.6 },
+            { name: "阿姆斯特丹", nameEn: "Amsterdam", region: "欧洲", lat: 52.3676, lng: 4.9041, enterprises: 80, gdp: 190, population: 2.5 }
         ];
 
         const regionColors = {
             "中东": "#e94560",
             "亚太": "#0ea5e9",
             "北美": "#22c55e",
-            "南美": "#f59e0b"
+            "南美": "#f59e0b",
+            "欧洲": "#8b5cf6"
         };
 
         // Initialize map with light theme
