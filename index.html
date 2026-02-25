@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全球零售企业分布地图</title>
+    <title>Global Retail Enterprise Distribution Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * {
@@ -12,7 +12,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: #f8fafc;
             color: #1e293b;
         }
@@ -191,65 +191,65 @@
 </head>
 <body>
     <div class="header">
-        <h1>全球零售企业分布地图</h1>
-        <p>Global Retail Enterprise Distribution - 29个主要城市零售行业数据概览</p>
+        <h1>Global Retail Enterprise Distribution</h1>
+        <p>Interactive visualization of retail industry data across 29 major cities worldwide</p>
     </div>
     <div class="container">
         <div id="map"></div>
         <div class="sidebar">
             <div class="legend">
-                <h3>区域图例</h3>
+                <h3>Region Legend</h3>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #e94560;"></div>
-                    <span>中东 (Middle East)</span>
+                    <span>Middle East</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #0ea5e9;"></div>
-                    <span>亚太 (Asia Pacific)</span>
+                    <span>Asia Pacific</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #22c55e;"></div>
-                    <span>北美 (North America)</span>
+                    <span>North America</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #f59e0b;"></div>
-                    <span>南美 (Latin America)</span>
+                    <span>Latin America</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #8b5cf6;"></div>
-                    <span>欧洲 (Europe)</span>
+                    <span>Europe</span>
                 </div>
             </div>
             <div class="stats-section">
-                <h3>区域统计</h3>
+                <h3>Regional Statistics</h3>
                 <div class="stat-card">
-                    <div class="region">北美 North America</div>
-                    <div class="value">1,596</div>
-                    <div class="label">零售企业总数 (8城市)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="region">中东 Middle East</div>
-                    <div class="value">841</div>
-                    <div class="label">零售企业总数 (4城市)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="region">亚太 Asia Pacific</div>
-                    <div class="value">1,262</div>
-                    <div class="label">零售企业总数 (7城市)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="region">南美 Latin America</div>
+                    <div class="region">Latin America</div>
                     <div class="value">2,699</div>
-                    <div class="label">零售企业总数 (3城市)</div>
+                    <div class="label">Total Retail Enterprises (3 cities)</div>
                 </div>
                 <div class="stat-card">
-                    <div class="region">欧洲 Europe</div>
+                    <div class="region">North America</div>
+                    <div class="value">1,596</div>
+                    <div class="label">Total Retail Enterprises (8 cities)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">Europe</div>
                     <div class="value">1,567</div>
-                    <div class="label">零售企业总数 (7城市)</div>
+                    <div class="label">Total Retail Enterprises (7 cities)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">Asia Pacific</div>
+                    <div class="value">1,262</div>
+                    <div class="label">Total Retail Enterprises (7 cities)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">Middle East</div>
+                    <div class="value">841</div>
+                    <div class="label">Total Retail Enterprises (4 cities)</div>
                 </div>
             </div>
             <div class="stats-section">
-                <h3>城市排名 (按企业数)</h3>
+                <h3>City Ranking (by Enterprises)</h3>
                 <div class="city-list" id="cityList"></div>
             </div>
         </div>
@@ -258,43 +258,43 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const cities = [
-            { name: "利雅得", nameEn: "Riyadh", region: "中东", lat: 24.7136, lng: 46.6753, enterprises: 129, gdp: 230, population: 7.5 },
-            { name: "伊斯坦布尔", nameEn: "Istanbul", region: "中东", lat: 41.0082, lng: 28.9784, enterprises: 262, gdp: 450, population: 16 },
-            { name: "迪拜", nameEn: "Dubai", region: "中东", lat: 25.2048, lng: 55.2708, enterprises: 304, gdp: 180, population: 3.6 },
-            { name: "开罗", nameEn: "Cairo", region: "中东", lat: 30.0444, lng: 31.2357, enterprises: 146, gdp: 200, population: 22 },
-            { name: "悉尼", nameEn: "Sydney", region: "亚太", lat: -33.8688, lng: 151.2093, enterprises: 256, gdp: 500, population: 5.3 },
-            { name: "香港", nameEn: "Hong Kong", region: "亚太", lat: 22.3193, lng: 114.1694, enterprises: 147, gdp: 370, population: 7.5 },
-            { name: "新加坡", nameEn: "Singapore", region: "亚太", lat: 1.3521, lng: 103.8198, enterprises: 133, gdp: 400, population: 5.9 },
-            { name: "首尔", nameEn: "Seoul", region: "亚太", lat: 37.5665, lng: 126.9780, enterprises: 54, gdp: 780, population: 25 },
-            { name: "东京", nameEn: "Tokyo", region: "亚太", lat: 35.6762, lng: 139.6503, enterprises: 61, gdp: 2000, population: 37 },
-            { name: "吉隆坡", nameEn: "Kuala Lumpur", region: "亚太", lat: 3.1390, lng: 101.6869, enterprises: 157, gdp: 190, population: 8 },
-            { name: "雅加达", nameEn: "Jakarta", region: "亚太", lat: -6.2088, lng: 106.8456, enterprises: 454, gdp: 320, population: 11 },
-            { name: "华盛顿 DC", nameEn: "Washington DC", region: "北美", lat: 38.9072, lng: -77.0369, enterprises: 134, gdp: 600, population: 6.4 },
-            { name: "波特兰", nameEn: "Portland", region: "北美", lat: 45.5152, lng: -122.6784, enterprises: 37, gdp: 200, population: 2.5 },
-            { name: "温哥华", nameEn: "Vancouver", region: "北美", lat: 49.2827, lng: -123.1207, enterprises: 51, gdp: 150, population: 2.7 },
-            { name: "多伦多", nameEn: "Toronto", region: "北美", lat: 43.6532, lng: -79.3832, enterprises: 121, gdp: 450, population: 6.7 },
-            { name: "西雅图", nameEn: "Seattle", region: "北美", lat: 47.6062, lng: -122.3321, enterprises: 119, gdp: 500, population: 4.1 },
-            { name: "纽约", nameEn: "New York", region: "北美", lat: 40.7128, lng: -74.0060, enterprises: 676, gdp: 2100, population: 20 },
-            { name: "洛杉矶", nameEn: "Los Angeles", region: "北美", lat: 34.0522, lng: -118.2437, enterprises: 209, gdp: 1100, population: 13 },
-            { name: "旧金山", nameEn: "San Francisco", region: "北美", lat: 37.7749, lng: -122.4194, enterprises: 249, gdp: 900, population: 4.6 },
-            { name: "圣保罗", nameEn: "São Paulo", region: "南美", lat: -23.5505, lng: -46.6333, enterprises: 2500, gdp: 430, population: 22 },
-            { name: "圣地亚哥", nameEn: "Santiago", region: "南美", lat: -33.4489, lng: -70.6693, enterprises: 143, gdp: 160, population: 7 },
-            { name: "墨西哥城", nameEn: "Mexico City", region: "南美", lat: 19.4326, lng: -99.1332, enterprises: 56, gdp: 410, population: 22 },
-            { name: "伦敦", nameEn: "London", region: "欧洲", lat: 51.5074, lng: -0.1278, enterprises: 652, gdp: 850, population: 9.5 },
-            { name: "巴黎", nameEn: "Paris", region: "欧洲", lat: 48.8566, lng: 2.3522, enterprises: 388, gdp: 760, population: 11 },
-            { name: "柏林", nameEn: "Berlin", region: "欧洲", lat: 52.5200, lng: 13.4050, enterprises: 49, gdp: 180, population: 3.6 },
-            { name: "罗马", nameEn: "Rome", region: "欧洲", lat: 41.9028, lng: 12.4964, enterprises: 69, gdp: 170, population: 4.3 },
-            { name: "马德里", nameEn: "Madrid", region: "欧洲", lat: 40.4168, lng: -3.7038, enterprises: 172, gdp: 280, population: 6.7 },
-            { name: "巴塞罗那", nameEn: "Barcelona", region: "欧洲", lat: 41.3851, lng: 2.1734, enterprises: 157, gdp: 200, population: 5.6 },
-            { name: "阿姆斯特丹", nameEn: "Amsterdam", region: "欧洲", lat: 52.3676, lng: 4.9041, enterprises: 80, gdp: 190, population: 2.5 }
+            { name: "Riyadh", region: "Middle East", lat: 24.7136, lng: 46.6753, enterprises: 129, gdp: 230, population: 7.5 },
+            { name: "Istanbul", region: "Middle East", lat: 41.0082, lng: 28.9784, enterprises: 262, gdp: 450, population: 16 },
+            { name: "Dubai", region: "Middle East", lat: 25.2048, lng: 55.2708, enterprises: 304, gdp: 180, population: 3.6 },
+            { name: "Cairo", region: "Middle East", lat: 30.0444, lng: 31.2357, enterprises: 146, gdp: 200, population: 22 },
+            { name: "Sydney", region: "Asia Pacific", lat: -33.8688, lng: 151.2093, enterprises: 256, gdp: 500, population: 5.3 },
+            { name: "Hong Kong", region: "Asia Pacific", lat: 22.3193, lng: 114.1694, enterprises: 147, gdp: 370, population: 7.5 },
+            { name: "Singapore", region: "Asia Pacific", lat: 1.3521, lng: 103.8198, enterprises: 133, gdp: 400, population: 5.9 },
+            { name: "Seoul", region: "Asia Pacific", lat: 37.5665, lng: 126.9780, enterprises: 54, gdp: 780, population: 25 },
+            { name: "Tokyo", region: "Asia Pacific", lat: 35.6762, lng: 139.6503, enterprises: 61, gdp: 2000, population: 37 },
+            { name: "Kuala Lumpur", region: "Asia Pacific", lat: 3.1390, lng: 101.6869, enterprises: 157, gdp: 190, population: 8 },
+            { name: "Jakarta", region: "Asia Pacific", lat: -6.2088, lng: 106.8456, enterprises: 454, gdp: 320, population: 11 },
+            { name: "Washington DC", region: "North America", lat: 38.9072, lng: -77.0369, enterprises: 134, gdp: 600, population: 6.4 },
+            { name: "Portland", region: "North America", lat: 45.5152, lng: -122.6784, enterprises: 37, gdp: 200, population: 2.5 },
+            { name: "Vancouver", region: "North America", lat: 49.2827, lng: -123.1207, enterprises: 51, gdp: 150, population: 2.7 },
+            { name: "Toronto", region: "North America", lat: 43.6532, lng: -79.3832, enterprises: 121, gdp: 450, population: 6.7 },
+            { name: "Seattle", region: "North America", lat: 47.6062, lng: -122.3321, enterprises: 119, gdp: 500, population: 4.1 },
+            { name: "New York", region: "North America", lat: 40.7128, lng: -74.0060, enterprises: 676, gdp: 2100, population: 20 },
+            { name: "Los Angeles", region: "North America", lat: 34.0522, lng: -118.2437, enterprises: 209, gdp: 1100, population: 13 },
+            { name: "San Francisco", region: "North America", lat: 37.7749, lng: -122.4194, enterprises: 249, gdp: 900, population: 4.6 },
+            { name: "São Paulo", region: "Latin America", lat: -23.5505, lng: -46.6333, enterprises: 2500, gdp: 430, population: 22 },
+            { name: "Santiago", region: "Latin America", lat: -33.4489, lng: -70.6693, enterprises: 143, gdp: 160, population: 7 },
+            { name: "Mexico City", region: "Latin America", lat: 19.4326, lng: -99.1332, enterprises: 56, gdp: 410, population: 22 },
+            { name: "London", region: "Europe", lat: 51.5074, lng: -0.1278, enterprises: 652, gdp: 850, population: 9.5 },
+            { name: "Paris", region: "Europe", lat: 48.8566, lng: 2.3522, enterprises: 388, gdp: 760, population: 11 },
+            { name: "Berlin", region: "Europe", lat: 52.5200, lng: 13.4050, enterprises: 49, gdp: 180, population: 3.6 },
+            { name: "Rome", region: "Europe", lat: 41.9028, lng: 12.4964, enterprises: 69, gdp: 170, population: 4.3 },
+            { name: "Madrid", region: "Europe", lat: 40.4168, lng: -3.7038, enterprises: 172, gdp: 280, population: 6.7 },
+            { name: "Barcelona", region: "Europe", lat: 41.3851, lng: 2.1734, enterprises: 157, gdp: 200, population: 5.6 },
+            { name: "Amsterdam", region: "Europe", lat: 52.3676, lng: 4.9041, enterprises: 80, gdp: 190, population: 2.5 }
         ];
 
         const regionColors = {
-            "中东": "#e94560",
-            "亚太": "#0ea5e9",
-            "北美": "#22c55e",
-            "南美": "#f59e0b",
-            "欧洲": "#8b5cf6"
+            "Middle East": "#e94560",
+            "Asia Pacific": "#0ea5e9",
+            "North America": "#22c55e",
+            "Latin America": "#f59e0b",
+            "Europe": "#8b5cf6"
         };
 
         // Initialize map with light theme
@@ -350,9 +350,9 @@
                 .addTo(map)
                 .bindPopup(`
                     <div class="popup-city">${city.name}</div>
-                    <div class="popup-region">${city.nameEn} · ${city.region}</div>
+                    <div class="popup-region">${city.region}</div>
                     <div class="popup-stat">
-                        <span class="popup-stat-label">零售企业数量</span>
+                        <span class="popup-stat-label">Retail Enterprises</span>
                         <span class="popup-stat-value highlight">${city.enterprises}</span>
                     </div>
                     <div class="popup-stat">
@@ -360,7 +360,7 @@
                         <span class="popup-stat-value">~$${city.gdp}B</span>
                     </div>
                     <div class="popup-stat">
-                        <span class="popup-stat-label">人口</span>
+                        <span class="popup-stat-label">Population</span>
                         <span class="popup-stat-value">~${city.population}M</span>
                     </div>
                 `, {

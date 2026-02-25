@@ -1,41 +1,45 @@
-# 全球零售企业分布地图
+# Global Retail Enterprise Distribution Map
 
-Global Retail Enterprise Distribution - 交互式可视化展示17个主要城市的零售行业数据
+Interactive visualization of retail industry data across 29 major cities worldwide.
 
-## 预览
+## Live Demo
 
-在线访问: [GitHub Pages](https://huangchunbo2025.github.io/global-enterprise-map/)
+**View Online:** [GitHub Pages](https://huangchunbo2025.github.io/global-enterprise-map/)
 
-## 功能特性
+## Features
 
-- **交互式地图** - 基于 Leaflet.js 的浅色主题世界地图
-- **数据可视化** - 圆形标记大小根据企业数量动态缩放
-- **区域颜色编码**:
-  - 🔴 中东 (Middle East) - 4个城市
-  - 🔵 亚太 (Asia Pacific) - 5个城市
-  - 🟢 北美 (North America) - 8个城市
-- **信息弹窗** - 点击标记显示城市详细数据（企业数量、GDP、人口）
-- **侧边栏统计** - 区域汇总和城市排名
-- **响应式设计** - 适配桌面和移动设备
+- **Interactive Map** - Leaflet.js based world map with light theme
+- **Data Visualization** - Circle markers sized by enterprise count
+- **Regional Color Coding**:
+  - 🔴 Middle East (4 cities)
+  - 🔵 Asia Pacific (7 cities)
+  - 🟢 North America (8 cities)
+  - 🟠 Latin America (3 cities)
+  - 🟣 Europe (7 cities)
+- **Info Popups** - Click markers to view city details (enterprises, GDP, population)
+- **Sidebar Statistics** - Regional summaries and city rankings
+- **Responsive Design** - Works on desktop and mobile devices
 
-## 数据概览
+## Data Overview
 
-| 区域 | 城市数 | 企业总数 |
-|------|--------|----------|
-| 北美 | 8 | 1,596 |
-| 中东 | 4 | 841 |
-| 亚太 | 5 | 651 |
+| Region | Cities | Total Enterprises |
+|--------|--------|-------------------|
+| Latin America | 3 | 2,699 |
+| North America | 8 | 1,596 |
+| Europe | 7 | 1,567 |
+| Asia Pacific | 7 | 1,262 |
+| Middle East | 4 | 841 |
 
-## 技术栈
+## Tech Stack
 
 - HTML5 / CSS3
 - JavaScript (ES6+)
-- [Leaflet.js](https://leafletjs.com/) - 开源地图库
-- [CARTO](https://carto.com/) - 地图瓦片服务
+- [Leaflet.js](https://leafletjs.com/) - Open-source map library
+- [CARTO](https://carto.com/) - Map tile service
 
-## 本地运行
+## Local Development
 
-直接用浏览器打开 `index.html` 即可。
+Simply open `index.html` in a browser.
 
 ## License
 
