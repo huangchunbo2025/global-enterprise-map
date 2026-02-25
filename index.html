@@ -192,7 +192,7 @@
 <body>
     <div class="header">
         <h1>Global Retail Enterprise Distribution</h1>
-        <p>Interactive visualization of retail industry data across 29 major cities worldwide</p>
+        <p>Interactive visualization of retail industry data across 20 cities + 9 customer regions</p>
     </div>
     <div class="container">
         <div id="map"></div>
@@ -219,6 +219,10 @@
                     <div class="legend-color" style="background: #8b5cf6;"></div>
                     <span>Europe</span>
                 </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #6b7280;"></div>
+                    <span>Customer Regions</span>
+                </div>
             </div>
             <div class="stats-section">
                 <h3>Regional Statistics</h3>
@@ -239,13 +243,18 @@
                 </div>
                 <div class="stat-card">
                     <div class="region">Asia Pacific</div>
-                    <div class="value">1,262</div>
-                    <div class="label">Total Retail Enterprises (7 cities)</div>
+                    <div class="value">1,000</div>
+                    <div class="label">Total Retail Enterprises (4 cities)</div>
                 </div>
                 <div class="stat-card">
                     <div class="region">Middle East</div>
-                    <div class="value">841</div>
-                    <div class="label">Total Retail Enterprises (4 cities)</div>
+                    <div class="value">433</div>
+                    <div class="label">Total Retail Enterprises (2 cities)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="region">Customer Regions</div>
+                    <div class="value">9</div>
+                    <div class="label">Countries/Regions</div>
                 </div>
             </div>
             <div class="stats-section">
@@ -259,16 +268,20 @@
     <script>
         const cities = [
             { name: "Riyadh", region: "Middle East", lat: 24.7136, lng: 46.6753, enterprises: 129, gdp: 230, population: 7.5 },
-            { name: "Istanbul", region: "Middle East", lat: 41.0082, lng: 28.9784, enterprises: 262, gdp: 450, population: 16 },
             { name: "Dubai", region: "Middle East", lat: 25.2048, lng: 55.2708, enterprises: 304, gdp: 180, population: 3.6 },
-            { name: "Cairo", region: "Middle East", lat: 30.0444, lng: 31.2357, enterprises: 146, gdp: 200, population: 22 },
             { name: "Sydney", region: "Asia Pacific", lat: -33.8688, lng: 151.2093, enterprises: 256, gdp: 500, population: 5.3 },
-            { name: "Hong Kong", region: "Asia Pacific", lat: 22.3193, lng: 114.1694, enterprises: 147, gdp: 370, population: 7.5 },
             { name: "Singapore", region: "Asia Pacific", lat: 1.3521, lng: 103.8198, enterprises: 133, gdp: 400, population: 5.9 },
-            { name: "Seoul", region: "Asia Pacific", lat: 37.5665, lng: 126.9780, enterprises: 54, gdp: 780, population: 25 },
-            { name: "Tokyo", region: "Asia Pacific", lat: 35.6762, lng: 139.6503, enterprises: 61, gdp: 2000, population: 37 },
             { name: "Kuala Lumpur", region: "Asia Pacific", lat: 3.1390, lng: 101.6869, enterprises: 157, gdp: 190, population: 8 },
             { name: "Jakarta", region: "Asia Pacific", lat: -6.2088, lng: 106.8456, enterprises: 454, gdp: 320, population: 11 },
+            { name: "China", region: "Customer Regions", lat: 35.8617, lng: 104.1954, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "South Korea", region: "Customer Regions", lat: 35.9078, lng: 127.7669, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Turkey", region: "Customer Regions", lat: 38.9637, lng: 35.2433, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Egypt", region: "Customer Regions", lat: 26.8206, lng: 30.8025, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Iraq", region: "Customer Regions", lat: 33.2232, lng: 43.6793, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Hong Kong", region: "Customer Regions", lat: 22.3193, lng: 114.1694, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Taiwan", region: "Customer Regions", lat: 23.6978, lng: 120.9605, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Japan", region: "Customer Regions", lat: 36.2048, lng: 138.2529, enterprises: null, gdp: null, population: null, isCustomer: true },
+            { name: "Morocco", region: "Customer Regions", lat: 31.7917, lng: -7.0926, enterprises: null, gdp: null, population: null, isCustomer: true },
             { name: "Washington DC", region: "North America", lat: 38.9072, lng: -77.0369, enterprises: 134, gdp: 600, population: 6.4 },
             { name: "Portland", region: "North America", lat: 45.5152, lng: -122.6784, enterprises: 37, gdp: 200, population: 2.5 },
             { name: "Vancouver", region: "North America", lat: 49.2827, lng: -123.1207, enterprises: 51, gdp: 150, population: 2.7 },
@@ -294,7 +307,8 @@
             "Asia Pacific": "#0ea5e9",
             "North America": "#22c55e",
             "Latin America": "#f59e0b",
-            "Europe": "#8b5cf6"
+            "Europe": "#8b5cf6",
+            "Customer Regions": "#6b7280"
         };
 
         // Initialize map with light theme
@@ -313,7 +327,8 @@
         }).addTo(map);
 
         // Calculate marker size based on enterprise count
-        function getMarkerSize(enterprises) {
+        function getMarkerSize(enterprises, isCustomer) {
+            if (isCustomer) return 20; // Fixed size for customer regions
             const minSize = 14;
             const maxSize = 50;
             const maxEnterprises = 2500;
@@ -323,7 +338,7 @@
         // Create markers
         const markers = [];
         cities.forEach(city => {
-            const size = getMarkerSize(city.enterprises);
+            const size = getMarkerSize(city.enterprises, city.isCustomer);
             const color = regionColors[city.region];
 
             const icon = L.divIcon({
@@ -346,9 +361,16 @@
                 iconAnchor: [size/2, size/2]
             });
 
-            const marker = L.marker([city.lat, city.lng], { icon })
-                .addTo(map)
-                .bindPopup(`
+            const popupContent = city.isCustomer
+                ? `
+                    <div class="popup-city">${city.name}</div>
+                    <div class="popup-region">${city.region}</div>
+                    <div class="popup-stat">
+                        <span class="popup-stat-label">Status</span>
+                        <span class="popup-stat-value highlight">Customer Region</span>
+                    </div>
+                `
+                : `
                     <div class="popup-city">${city.name}</div>
                     <div class="popup-region">${city.region}</div>
                     <div class="popup-stat">
@@ -363,15 +385,20 @@
                         <span class="popup-stat-label">Population</span>
                         <span class="popup-stat-value">~${city.population}M</span>
                     </div>
-                `, {
+                `;
+
+            const marker = L.marker([city.lat, city.lng], { icon })
+                .addTo(map)
+                .bindPopup(popupContent, {
                     closeButton: false
                 });
 
             markers.push({ marker, city });
         });
 
-        // Populate city list
-        const sortedCities = [...cities].sort((a, b) => b.enterprises - a.enterprises);
+        // Populate city list (exclude customer regions from ranking)
+        const enterpriseCities = cities.filter(c => !c.isCustomer);
+        const sortedCities = [...enterpriseCities].sort((a, b) => b.enterprises - a.enterprises);
         const cityList = document.getElementById('cityList');
 
         sortedCities.forEach((city, index) => {
