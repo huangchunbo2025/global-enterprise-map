@@ -89,6 +89,21 @@
             padding: 12px 16px;
             margin-bottom: 8px;
             border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .stat-card:hover {
+            background: #e2e8f0;
+            transform: translateX(4px);
+        }
+        .stat-card.active {
+            background: #e94560;
+            border-color: #e94560;
+        }
+        .stat-card.active .region,
+        .stat-card.active .value,
+        .stat-card.active .label {
+            color: #ffffff;
         }
         .stat-card .region {
             font-size: 12px;
@@ -226,32 +241,37 @@
             </div>
             <div class="stats-section">
                 <h3>Regional Statistics</h3>
-                <div class="stat-card">
+                <div class="stat-card" data-region="all">
+                    <div class="region">All Regions</div>
+                    <div class="value">7,965</div>
+                    <div class="label">Total (20 cities + 9 regions)</div>
+                </div>
+                <div class="stat-card" data-region="Latin America">
                     <div class="region">Latin America</div>
                     <div class="value">2,699</div>
                     <div class="label">Total Retail Enterprises (3 cities)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-region="North America">
                     <div class="region">North America</div>
                     <div class="value">1,596</div>
                     <div class="label">Total Retail Enterprises (8 cities)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-region="Europe">
                     <div class="region">Europe</div>
                     <div class="value">1,567</div>
                     <div class="label">Total Retail Enterprises (7 cities)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-region="Asia Pacific">
                     <div class="region">Asia Pacific</div>
                     <div class="value">1,000</div>
                     <div class="label">Total Retail Enterprises (4 cities)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-region="Middle East">
                     <div class="region">Middle East</div>
                     <div class="value">433</div>
                     <div class="label">Total Retail Enterprises (2 cities)</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-region="Customer Regions">
                     <div class="region">Customer Regions</div>
                     <div class="value">9</div>
                     <div class="label">Countries/Regions</div>
@@ -396,29 +416,71 @@
             markers.push({ marker, city });
         });
 
-        // Populate city list (exclude customer regions from ranking)
-        const enterpriseCities = cities.filter(c => !c.isCustomer);
-        const sortedCities = [...enterpriseCities].sort((a, b) => b.enterprises - a.enterprises);
+        // City list element
         const cityList = document.getElementById('cityList');
 
-        sortedCities.forEach((city, index) => {
-            const item = document.createElement('div');
-            item.className = 'city-item';
-            item.innerHTML = `
-                <span class="city-name">${index + 1}. ${city.name}</span>
-                <span class="city-count">${city.enterprises}</span>
-            `;
-            item.style.borderLeft = `3px solid ${regionColors[city.region]}`;
+        // Function to populate city list based on selected region
+        function populateCityList(selectedRegion = 'all') {
+            cityList.innerHTML = '';
 
-            item.addEventListener('click', () => {
-                map.setView([city.lat, city.lng], 6);
-                const markerData = markers.find(m => m.city.name === city.name);
-                if (markerData) {
-                    markerData.marker.openPopup();
-                }
+            let filteredCities;
+            if (selectedRegion === 'all') {
+                filteredCities = cities.filter(c => !c.isCustomer);
+            } else if (selectedRegion === 'Customer Regions') {
+                filteredCities = cities.filter(c => c.isCustomer);
+            } else {
+                filteredCities = cities.filter(c => c.region === selectedRegion && !c.isCustomer);
+            }
+
+            const sortedCities = [...filteredCities].sort((a, b) => {
+                if (a.enterprises === null) return 1;
+                if (b.enterprises === null) return -1;
+                return b.enterprises - a.enterprises;
             });
 
-            cityList.appendChild(item);
+            sortedCities.forEach((city, index) => {
+                const item = document.createElement('div');
+                item.className = 'city-item';
+                if (city.isCustomer) {
+                    item.innerHTML = `
+                        <span class="city-name">${index + 1}. ${city.name}</span>
+                        <span class="city-count" style="color: #6b7280;">Customer</span>
+                    `;
+                } else {
+                    item.innerHTML = `
+                        <span class="city-name">${index + 1}. ${city.name}</span>
+                        <span class="city-count">${city.enterprises}</span>
+                    `;
+                }
+                item.style.borderLeft = `3px solid ${regionColors[city.region]}`;
+
+                item.addEventListener('click', () => {
+                    map.setView([city.lat, city.lng], 6);
+                    const markerData = markers.find(m => m.city.name === city.name);
+                    if (markerData) {
+                        markerData.marker.openPopup();
+                    }
+                });
+
+                cityList.appendChild(item);
+            });
+        }
+
+        // Initialize city list with all cities
+        populateCityList('all');
+
+        // Add click handlers to stat cards for filtering
+        const statCards = document.querySelectorAll('.stat-card[data-region]');
+        statCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove active class from all cards
+                statCards.forEach(c => c.classList.remove('active'));
+                // Add active class to clicked card
+                card.classList.add('active');
+                // Filter city list
+                const region = card.dataset.region;
+                populateCityList(region);
+            });
         });
     </script>
 </body>
